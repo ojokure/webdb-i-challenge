@@ -61,7 +61,7 @@ accountRouter.put("/:id", async (req, res) => {
         budget: req.body.budget
       });
 
-    res.status(200).json(updated + "account edited succesfully");
+    res.status(200).json(updated + "account(s) edited succesfully");
   } catch (error) {
     res.status(500).json({
       message: error.message
@@ -69,6 +69,17 @@ accountRouter.put("/:id", async (req, res) => {
   }
 });
 
-
+accountRouter.delete("/:id", (req, res) => {
+  db.select("*")
+    .from("accounts")
+    .where({ id: req.params.id })
+    .del()
+    .then(deletedCount => {
+      res.json(deletedCount + " account(s) got deleted!!");
+    })
+    .catch(error => {
+      res.status(500).json({ message: error.message });
+    });
+});
 
 module.exports = accountRouter;
