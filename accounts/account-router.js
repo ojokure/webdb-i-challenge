@@ -33,4 +33,21 @@ accountRouter.get("/:id", async (req, res) => {
   }
 });
 
+accountRouter.post("/", async (req, res) => {
+  try {
+    const newAccount = await db
+      .select("*")
+      .from("accounts")
+      .insert({
+        name: req.body.name,
+        budget: req.body.budget
+      })
+      .where({ id: req.params.id });
+
+    res.json("New account got created with an id of " + newAccount[0]);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 module.exports = accountRouter;
