@@ -50,4 +50,23 @@ accountRouter.post("/", async (req, res) => {
   }
 });
 
+accountRouter.put("/:id", async (req, res) => {
+  try {
+    const updated = await db
+      .select("*")
+      .from("accounts")
+      .where({ id: req.params.id })
+      .update({
+        name: req.body.name,
+        budget: req.body.budget
+      });
+
+    res.status(200).json(updated + "account edited succesfully");
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    });
+  }
+});
+
 module.exports = accountRouter;
